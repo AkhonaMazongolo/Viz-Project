@@ -13,10 +13,45 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  name          String?
+  password      String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  conversations Conversation[]
+  documents     Document[]
+}
+
+model Conversation {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id])
+  title     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  conversationId Int
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  role           String
+  content        String
+  createdAt      DateTime     @default(now())
+}
+
+model Document {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  user            User     @relation(fields: [userId], references: [id])
+  fileName        String
+  originalName    String
+  filePath        String
+  documentType    String
+  extractedText   String
+  extractedFields String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

@@ -17,6 +17,7 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [documentContext, setDocumentContext] = useState(null);
 
   useEffect(() => {
     const firstMessage = location.state?.initialMessage;
@@ -39,7 +40,7 @@ export default function Chat() {
     setLoading(true);
 
     try {
-      const reply = await sendMessage(message);
+      const reply = await sendMessage(message, documentContext);
 
       setMessages((prev) => [
         ...prev,
@@ -109,7 +110,12 @@ export default function Chat() {
         </div>
 
         {/* Input */}
-        <ChatInput value={input} onChange={setInput} onSend={handleSend} />
+        <ChatInput
+          value={input}
+          onChange={setInput}
+          onSend={handleSend}
+          onDocumentReady={setDocumentContext}
+        />
       </div>
     </div>
   );
