@@ -18,7 +18,7 @@ export default function Login() {
     try {
       const response = await axios.post("http://localhost:3000/login", form);
       localStorage.setItem("user", JSON.stringify(response.data.user));
-      navigate("/chat");
+      navigate("/");
     } catch (err) {
       setError(err.response?.data?.error || "Login failed");
     }

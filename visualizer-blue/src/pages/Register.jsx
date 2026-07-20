@@ -26,14 +26,13 @@ export default function Register() {
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/register", {
+      await axios.post("http://localhost:3000/register", {
         name: form.name,
         email: form.email,
         password: form.password,
       });
 
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-      navigate("/chat");
+      navigate("/login");
     } catch (err) {
       setError(err.response?.data?.error || "Registration failed");
     }

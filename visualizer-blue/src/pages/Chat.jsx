@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import Sidebar from "../components/Sidebar";
@@ -9,6 +9,10 @@ import { sendMessage } from "../services/chatService";
 
 export default function Chat() {
   const location = useLocation();
+  const user = useMemo(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  }, []);
 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -78,8 +82,13 @@ export default function Chat() {
         <div className="h-16 border-b border-slate-200 px-8 flex items-center justify-between">
           <h2 className="font-semibold text-slate-800">Visualizer AI</h2>
 
-          <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center">
-            A
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-slate-600">
+              {user?.name || user?.email || "Guest"}
+            </span>
+            <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center">
+              {(user?.name || user?.email || "A").charAt(0).toUpperCase()}
+            </div>
           </div>
         </div>
 

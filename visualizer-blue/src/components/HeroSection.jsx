@@ -1,7 +1,9 @@
-export default function HeroSection() {
+export default function HeroSection({ userName }) {
+  const greeting = userName ? `HELLO, ${userName.toUpperCase()}` : "HEY THERE";
+
   return (
     <div className="flex flex-col items-center justify-center text-center flex-1">
-      <h1 className="text-7xl font-extrabold text-slate-800">HELLO, AKHONA</h1>
+      <h1 className="text-7xl font-extrabold text-slate-800">{greeting}</h1>
 
       <p className="text-2xl text-slate-500 mt-4 max-w-4xl">
         Transform documents into meaningful insights, intelligent visuals and
