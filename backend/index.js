@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { AzureOpenAI } from "openai";
 import multer from "multer";
 import { loginUser, registerUser } from "./auth.js";
+
 import {
   getConversationHistory,
   getOrCreateConversation,
@@ -55,6 +56,9 @@ app.post("/login", async (req, res) => {
 app.post("/upload", upload.single("document"), async (req, res) => {
   try {
     const { userId } = req.body;
+
+    console.log("Body:", req.body);
+    console.log("File:", req.file);
 
     if (!req.file || !userId) {
       return res.status(400).json({ error: "Document and user ID are required" });
@@ -117,6 +121,7 @@ app.post("/chat", async (req, res) => {
     });
   }
 });
+
 
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");

@@ -24,13 +24,14 @@ model User {
 }
 
 model Conversation {
-  id        Int       @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   userId    Int
-  user      User      @relation(fields: [userId], references: [id])
+  user      User       @relation(fields: [userId], references: [id])
   title     String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   messages  Message[]
+  documents Document[]
 }
 
 model Message {
@@ -43,15 +44,64 @@ model Message {
 }
 
 model Document {
-  id              Int      @id @default(autoincrement())
-  userId          Int
-  user            User     @relation(fields: [userId], references: [id])
-  fileName        String
-  originalName    String
-  filePath        String
-  documentType    String
-  extractedText   String
-  extractedFields String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id     Int  @id @default(autoincrement())
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  conversationId Int
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  fileName       String
+  originalName   String
+  filePath       String
+  documentType   String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  glDocuments    GLDocument[]
+}
+
+model GLDocument {
+  id                   Int       @id @default(autoincrement())
+  accountNumber        Int?
+  reference            String?
+  contactAccount       String?
+  description          String?
+  debit                Float?
+  credit               Float?
+  balance              Float?
+  monthName            String?
+  categoryName         String?
+  rootName             String?
+  subCategoryName      String?
+  fsaName              String?
+  subFsaName           String?
+  material             Int?
+  randMaterial         Float?
+  amount               Float?
+  departmentCode       String?
+  dimensionSetID       Int?
+  paypointCode         Int?
+  genPostingType       String?
+  genBusPostingGroup   String?
+  balanceAccountType   String?
+  balanceAccountNumber Int?
+  entryNo              Int?
+  externalDocumentNo   String?
+  accountName          String?
+  jobTypeCode          Int?
+  documentType         String?
+  genProdOPostingGroup String?
+  letter               String?
+  letterDate           DateTime?
+  vendorTypeCode       String?
+  itemCategoryCode     String?
+  productTypeCode      String?
+  expenseSplitCode     String?
+  trialCode            String?
+  resourseCode         String?
+  userID               String?
+  date                 DateTime?
+  glAccountName        String?
+  vatAmount            Float?
+  documentID           Int
+  conversation         Document  @relation(fields: [documentID], references: [id])
 }
