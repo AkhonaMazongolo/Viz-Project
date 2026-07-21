@@ -12,6 +12,31 @@ datasource db {
   provider = "sqlite"
 }
 
+model Account {
+  id                String @id @default(cuid())
+  userId            Int
+  provider          String
+  providerAccountId String
+  user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String @id @default(cuid())
+  sessionToken String @unique
+  userId       Int
+  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
 model User {
   id            Int            @id @default(autoincrement())
   email         String         @unique
@@ -21,6 +46,11 @@ model User {
   updatedAt     DateTime       @updatedAt
   conversations Conversation[]
   documents     Document[]
+
+  accounts Account[]
+  sessions Session[]
+
+  @@map("users")
 }
 
 model Conversation {
@@ -35,12 +65,14 @@ model Conversation {
 }
 
 model Message {
-  id             Int          @id @default(autoincrement())
+  id Int @id @default(autoincrement())
+
   conversationId Int
   conversation   Conversation @relation(fields: [conversationId], references: [id])
-  role           String
-  content        String
-  createdAt      DateTime     @default(now())
+
+  role      String
+  content   String
+  createdAt DateTime @default(now())
 }
 
 model Document {
@@ -50,13 +82,20 @@ model Document {
 
   conversationId Int
   conversation   Conversation @relation(fields: [conversationId], references: [id])
-  fileName       String
-  originalName   String
-  filePath       String
-  documentType   String
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+
+  fileName     String
+  originalName String
+  filePath     String
+
+  documentType DocumentType
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
   glDocuments    GLDocument[]
+  visualizations Visualization[]
+  insights       Insight[]
+  chunks         DocumentChunk[]
+  trialBalances  TrialBalance[]
 }
 
 model GLDocument {
@@ -102,6 +141,95 @@ model GLDocument {
   date                 DateTime?
   glAccountName        String?
   vatAmount            Float?
-  documentID           Int
-  conversation         Document  @relation(fields: [documentID], references: [id])
+
+  documentID   Int
+  conversation Document @relation(fields: [documentID], references: [id])
+}
+
+model TrialBalance {
+  id            Int     @id @default(autoincrement())
+  accountNumber String?
+  accountType   String?
+  branch        Int?
+  dept          String?
+  debits        Float?
+  credits       Float?
+  PYDebits      Float?
+  PYCredits     Float?
+
+  documentID   Int
+  conversation Document @relation(fields: [documentID], references: [id])
+}
+
+model Visualization {
+  id Int @id @default(autoincrement())
+
+  documentId Int
+  document   Document @relation(fields: [documentId], references: [id])
+
+  title String
+
+  chartType ChartType
+
+  prompt String?
+
+  config Json
+
+  createdAt DateTime @default(now())
+}
+
+model Insight {
+  id Int @id @default(autoincrement())
+
+  documentId Int
+
+  document Document @relation(fields: [documentId], references: [id])
+
+  title String
+
+  description String
+
+  metricValue Float?
+
+  createdAt DateTime @default(now())
+}
+
+model DocumentChunk {
+  id Int @id @default(autoincrement())
+
+  documentId Int
+
+  document Document @relation(fields: [documentId], references: [id])
+
+  content String
+
+  embeddingId String?
+
+  pageNumber Int?
+}
+
+enum ChartType {
+  BAR
+  LINE
+  PIE
+  TREEMAP
+  SANKEY
+  WATERFALL
+  HEATMAP
+}
+
+enum DocumentType {
+  GENERAL_LEDGER
+  TRIAL_BALANCE
+  JOURNAL_ENTRY
+  AP_AGING
+  AR_AGING
+  BANK_STATEMENT
+}
+
+enum ProcessingStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
 }
