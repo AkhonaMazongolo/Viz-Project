@@ -27,7 +27,7 @@ export default function Home() {
 
   return (
     <div className="flex h-screen bg-white">
-      <Sidebar />
+      {/* <Sidebar /> */}
 
       <div className="flex-1 flex flex-col">
         <div className="flex justify-end p-6">

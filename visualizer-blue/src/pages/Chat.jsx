@@ -76,7 +76,7 @@ export default function Chat() {
 
   return (
     <div className="h-screen flex bg-white">
-      <Sidebar />
+      {/* <Sidebar /> */}
 
       <div className="flex flex-col flex-1">
         {/* Header */}

@@ -81,3 +81,8 @@ export async function loginUser({ email, password }) {
 
   return { user: toSafeUser(user) };
 }
+
+//helper functions
+//functions to validate user inputs when user is registering
+
+

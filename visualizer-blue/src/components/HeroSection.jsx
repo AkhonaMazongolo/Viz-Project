@@ -6,7 +6,7 @@ export default function HeroSection({ userName }) {
       <h1 className="text-7xl font-extrabold text-slate-800">{greeting}</h1>
 
       <p className="text-2xl text-slate-500 mt-4 max-w-4xl">
-        Transform documents into meaningful insights, intelligent visuals and
+        Transform thoughts into meaningful insights, intelligent visuals and
         interactive experiences.
       </p>
 
